@@ -1,0 +1,14 @@
+#!/bin/sh
+logread -f | while read line
+do
+	case "$line" in
+	*ResetWLAN*) 
+	echo "Processing $line"
+                date >> /tmp/test.log
+                wifi reset
+		;;
+	*)
+		 echo "No Match: $line"
+		;;
+	esac
+done
