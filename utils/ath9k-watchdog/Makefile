@@ -13,7 +13,6 @@ PKG_RELEASE:=1
 
 
 include $(INCLUDE_DIR)/package.mk
-include $(INCLUDE_DIR)/cmake.mk
 
 
 define Package/ath9k-watchdog
@@ -34,4 +33,13 @@ define Package/ath9k-watchdog/install
 	$(INSTALL_BIN) files/ath9k-watchdog.init $(1)/etc/init.d/ath9k-watchdog
 endef
 
+define Build/Prepare
+	mkdir -p $(PKG_BUILD_DIR)
+endef
+
+define Build/Configure
+endef
+
+define Build/Compile
+endef
 $(eval $(call BuildPackage,ath9k-watchdog))
