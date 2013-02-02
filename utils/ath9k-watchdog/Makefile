@@ -13,7 +13,6 @@ PKG_RELEASE:=1
 
 
 include $(INCLUDE_DIR)/package.mk
-include $(INCLUDE_DIR)/cmake.mk
 
 
 define Package/ath9k-watchdog
