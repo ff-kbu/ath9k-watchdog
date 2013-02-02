@@ -5,6 +5,10 @@ APP=ath9k-watchdog
 PID_FILE=/var/run/$APP.pid
 
 start() {
+		if [ -f $PID_FILE ]; then
+			echo "Already Running"
+			exit 1
+		fi
         start-stop-daemon -S -x $APP -p $PID_FILE -m -b
 }
 
