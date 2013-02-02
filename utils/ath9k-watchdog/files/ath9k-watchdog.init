@@ -1,14 +1,14 @@
 #!/bin/sh /etc/rc.common
-# Copyright (C) 2012 OpenWrt.org
 
 START=95
-
-SERVICE_COMMAND=/usr/sbin/ath9k-watchdog
-
+APP=ath9k-watchdog
+PID_FILE=/var/run/$APP.pid
 
 start() {
-	service_start "$SERVICE_COMMAND" 
+        start-stop-daemon -S -x $APP -p $PID_FILE -m -b
+}
 
 stop() {
-	service_stop "$SERVICE_COMMAND"
+        start-stop-daemon -K -n $APP -p $PID_FILE -s TERM
+        rm -rf $PID_FILE
 }
