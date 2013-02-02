@@ -1,0 +1,14 @@
+#!/bin/sh /etc/rc.common
+# Copyright (C) 2012 OpenWrt.org
+
+START=95
+
+SERVICE_COMMAND=/usr/sbin/ath9k-watchdog
+
+
+start() {
+	service_start "$SERVICE_COMMAND" 
+
+stop() {
+	service_stop "$SERVICE_COMMAND"
+}
