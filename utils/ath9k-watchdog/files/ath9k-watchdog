@@ -2,7 +2,7 @@
 logread -f | while read line
 do
 	case "$line" in
-	*ResetWLAN*) 
+	*"phy0: Could not stop RX"*)
 	echo "Processing $line"
                 date >> /tmp/test.log
                 wifi reset
