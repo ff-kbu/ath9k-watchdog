@@ -33,7 +33,7 @@ define Package/curl-no-ssl/Default
 endef
 
 define Package/curl-no-ssl
-  $(call Package/curl/Default)
+  $(call Package/curl-no-ssl/Default)
   SUBMENU:=File Transfer
   DEPENDS:=+libcurl-no-ssl
   TITLE:=A client-side URL transfer utility
@@ -44,7 +44,7 @@ define Package/libcurl-no-ssl
   SECTION:=libs
   CATEGORY:=Libraries
   DEPENDS:=+zlib
-  TITLE:=A client-side URL transfer library
+  TITLE:=A client-side URL transfer library (no ssl)
 endef
 
 TARGET_CFLAGS += $(FPIC)
