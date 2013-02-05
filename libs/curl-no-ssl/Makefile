@@ -35,7 +35,7 @@ endef
 define Package/curl-no-ssl
   $(call Package/curl/Default)
   SUBMENU:=File Transfer
-  DEPENDS:=+libcurl-no-ssl !curl
+  DEPENDS:=+libcurl-no-ssl
   TITLE:=A client-side URL transfer utility
 endef
 
@@ -43,7 +43,7 @@ define Package/libcurl-no-ssl
   $(call Package/curl-no-ssl/Default)
   SECTION:=libs
   CATEGORY:=Libraries
-  DEPENDS:=+zlib !libcurl
+  DEPENDS:=+zlib
   TITLE:=A client-side URL transfer library
 endef
 
