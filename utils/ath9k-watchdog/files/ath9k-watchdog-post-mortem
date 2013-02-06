@@ -1,0 +1,25 @@
+#!/bin/sh
+# Save log
+tstmp=$(/bin/date +%s)
+/bin/dmesg > /tmp/dmesg.$tstmp
+
+#Prepare request
+. /lib/freifunk/lib_node.sh
+UPLOAD_URL='http://[2001:67c:20a0:b100::4]/ath9k-crash/'
+WGETC=$(which wget)
+node_id="$(get_node_id)"
+
+echo -n "nodeid=${node_id}&dmesg=" > /tmp/post_str.$tstmp
+/usr/bin/urlencode /tmp/dmesg.$tstmp >> /tmp/post_str.$tstmp
+
+#Submit request
+# Try for an hour => 3600 sekunds => 360 runs
+for cnt in $(seq 1 360);
+do
+        $WGETC -6 -q --post-file /tmp/post_str.$tstmp $UPLOAD_URL -O - && break
+		sleep 10
+done
+
+#Housekeeping
+rm /tmp/dmesg.$tstmp
+rm /tmp/post_str.$tstmp

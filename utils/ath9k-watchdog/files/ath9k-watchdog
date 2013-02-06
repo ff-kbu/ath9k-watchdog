@@ -4,8 +4,9 @@ do
 	case "$line" in
 	*ResetWLAN*) 
 	echo "Processing $line"
-                date >> /tmp/test.log
-                wifi reset
+            /usr/bin/ath9k-watchdog-postmortem &
+   			sleep 2 #Post-mortem will have 2 seks for saving logs, before we pollute 'em
+			wifi reset
 		;;
 	*)
 		 echo "No Match: $line"
