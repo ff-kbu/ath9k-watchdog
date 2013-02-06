@@ -8,5 +8,5 @@ end
 local f = io.open(filename, "rb")
 local content = f:read("*all")
 f:close()
-str = luci.http.protocol.urlencode(content)
+local str = luci.http.protocol.urlencode(content)
 print(str)
