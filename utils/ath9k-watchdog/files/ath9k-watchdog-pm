@@ -6,13 +6,12 @@ WGETC=$(which wget)
 
 
 # CD to avoid annoying prefixes
-cd /var/tmp/ath9k-watchdog
+cd /usr/lib/ath9k-watchdog
 
 #Poll directory every 10 secs
 while [ 1 = 1 ]
 do
-	for f in $(ls .)
-	do 
+	for f in $(ls .); do 
 		 $WGETC -6 -q --post-data="$(zcat $f)" $UPLOAD_URL -O - && rm $f
 	done
 	sleep 10

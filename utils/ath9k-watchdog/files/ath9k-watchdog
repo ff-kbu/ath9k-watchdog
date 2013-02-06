@@ -6,7 +6,7 @@ node_id="$(get_node_id)"
 logread -f | while read line
 do
 	case "$line" in
-	*ResetWLAN*) 
+	*"phy0: Could not stop"*) 
 			# Perform post-mortem dump
 			tstmp=$(/bin/date +%s)
 			echo -n "nodeid=${node_id}&tstmp=${tstmp}&dmesg=" > /tmp/$tstmp
@@ -16,22 +16,10 @@ do
 			/bin/gzip /tmp/$tstmp
 			
 			# Move into upload directory
-			mv  /tmp/$tstmp.gz /var/tmp/ath9k-watchdog
-			/sbin/wifi reset
-			
-			# The device has 45 secs to establish is connection via batman-adv
-			# If connection is still missing, do hard-reset
-			sleep 45
-			ping6 -q -c 1 2001:67c:20a0:b100::4
-			if [ $? -eq 0 ];then
-				# log server reached
-				# Post-mortem notifications can be send
-				# Housekeeping, then
-				rm /tmp/dmesg.$tstmp
-			else
-				#Bye 
-				/sbin/reboot
-			fi
+			mv  /tmp/$tstmp.gz /usr/lib/ath9k-watchdog
+
+			#Bye 
+			/sbin/reboot
 		;;
 	*)
 		;;
