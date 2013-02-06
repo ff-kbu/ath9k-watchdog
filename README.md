@@ -5,11 +5,11 @@ OpenWRT-Package for resetting Atheros-Nodes on wifi hangs. Current Attitude Adju
 * https://dev.openwrt.org/ticket/9654
 * https://dev.openwrt.org/ticket/11862
 
-Although these tickets seem to track generic race-conditions as of today (2012-02-06) wifi hangups correlate with:
+Although these tickets seem to track generic race-conditions as of today (2012-02-06) wifi hangups correlate with
 
 `ath: phy0: Could not stop RX, we could be confusing the DMA engine when we start RX up`
 
-Beeing present in the kernel ringbuffer (dmesg). This watchdog takes care of this problem by
+beeing present in the kernel ringbuffer (dmesg). This watchdog takes care of this problem by
 1. Dumping the kernel-ringbuffer to a file in /usr/lib/ath9k-watchdog
 2. Reboot the router
 3. Periodically checking /usr/lib/ath9k-watchdog for crash-reports and uploading 'em.
