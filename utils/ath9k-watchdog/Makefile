@@ -29,7 +29,6 @@ endef
 define Package/ath9k-watchdog/install
 	$(INSTALL_DIR) $(1)/usr/sbin
 	$(INSTALL_BIN) files/ath9k-watchdog $(1)/usr/sbin/
-	$(INSTALL_BIN) files/ath9k-watchdog_urlencode_helper $(1)/usr/sbin/
 	$(INSTALL_DIR) $(1)/etc/init.d/
 	$(INSTALL_BIN) files/ath9k-watchdog.init $(1)/etc/init.d/ath9k-watchdog
 endef
