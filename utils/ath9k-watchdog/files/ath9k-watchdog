@@ -6,7 +6,7 @@ node_id="$(get_node_id)"
 logread -f | while read line
 do
 	case "$line" in
-	*"phy0: Could not stop"*) 
+	*"Could not stop RX, we could be confusing the DMA engine when we start RX up"*) 
 			# Perform post-mortem dump
 			tstmp=$(/bin/date +%s)
 			echo -n "nodeid=${node_id}&tstmp=${tstmp}&dmesg=" > /tmp/$tstmp
