@@ -1,6 +1,6 @@
 #!/bin/sh
 . /lib/freifunk/lib_node.sh
-mkdir -p /var/tmp/ath9k-watchdog
+mkdir -p /usr/lib/ath9k-watchdog
 node_id="$(get_node_id)"
 
 logread -f | while read line
@@ -27,7 +27,6 @@ do
 				# log server reached
 				# Post-mortem notifications can be send
 				# Housekeeping, then
-				rm /tmp/$tstmp
 				rm /tmp/dmesg.$tstmp
 			else
 				#Bye 

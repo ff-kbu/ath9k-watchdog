@@ -1,6 +1,6 @@
 #!/bin/sh
 # Save log
-mkdir -p /var/tmp/ath9k-watchdog
+mkdir -p /usr/lib/ath9k-watchdog
 UPLOAD_URL='http://[2001:67c:20a0:b100::4]/ath9k-crash/'
 WGETC=$(which wget)
 
@@ -10,6 +10,7 @@ cd /var/tmp/ath9k-watchdog
 
 #Poll directory every 10 secs
 while [ 1 = 1 ]
+do
 	for f in $(ls .)
 	do 
 		 $WGETC -6 -q --post-data="$(zcat $f)" $UPLOAD_URL -O - && rm $f
@@ -17,5 +18,5 @@ while [ 1 = 1 ]
 	sleep 10
 	# If there are more than 15 files, assume that files cannot be uploaded
 	# Delete oldest files in order to avoid jffs-overflow
-	ls -t | sed -e '1,15d' | xargs -d '\n' rm 
-do
+	ls -t | sed -e '1,15d' | xargs -d '\n' rm 2> /dev/null
+done
