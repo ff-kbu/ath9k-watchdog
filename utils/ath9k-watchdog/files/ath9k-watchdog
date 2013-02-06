@@ -1,15 +1,40 @@
 #!/bin/sh
+. /lib/freifunk/lib_node.sh
+mkdir -p /var/tmp/ath9k-watchdog
+node_id="$(get_node_id)"
+
 logread -f | while read line
 do
 	case "$line" in
 	*ResetWLAN*) 
-	echo "Processing $line"
-            /usr/bin/ath9k-watchdog-postmortem &
-   			sleep 2 #Post-mortem will have 2 seks for saving logs, before we pollute 'em
-			wifi reset
+			# Perform post-mortem dump
+			tstmp=$(/bin/date +%s)
+			echo -n "nodeid=${node_id}&tstmp=${tstmp}&dmesg=" > /tmp/$tstmp
+			/bin/dmesg > /tmp/dmesg.$tstmp
+			/usr/bin/urlencode /tmp/dmesg.$tstmp >> /tmp/$tstmp
+			# Compress to preserve space
+			/bin/gzip /tmp/$tstmp
+			
+			# Move into upload directory
+			mv  /tmp/$tstmp.gz /var/tmp/ath9k-watchdog
+			/sbin/wifi reset
+			
+			# The device has 45 secs to establish is connection via batman-adv
+			# If connection is still missing, do hard-reset
+			sleep 45
+			ping6 -q -c 1 2001:67c:20a0:b100::4
+			if [ $? -eq 0 ];then
+				# log server reached
+				# Post-mortem notifications can be send
+				# Housekeeping, then
+				rm /tmp/$tstmp
+				rm /tmp/dmesg.$tstmp
+			else
+				#Bye 
+				/sbin/reboot
+			fi
 		;;
 	*)
-		 echo "No Match: $line"
 		;;
 	esac
 done
