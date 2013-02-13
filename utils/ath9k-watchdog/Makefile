@@ -11,18 +11,16 @@ PKG_NAME:=ath9k-watchdog
 PKG_VERSION:=1
 PKG_RELEASE:=1
 
-
 include $(INCLUDE_DIR)/package.mk
-
-
 define Package/ath9k-watchdog
   SECTION:=utils
   CATEGORY:=Utilities
-  TITLE:=Watchdog for ath9k-outages
+  TITLE:=Watchdog for ath9k outages
+  DEPENDS:=+lua +luci-lib-web +wget-nossl
 endef
 
 define Package/ath9k-watchdog/description
- If pattern "ResetWLAN" is seen in the logs, wifi reset is executed
+ If pattern "Could not stop RX" is seen in the logs, /sbin/reboot is executed and post-morten data is uploaded
 endef
 
 
@@ -30,6 +28,11 @@ define Package/ath9k-watchdog/install
 	$(INSTALL_DIR) $(1)/usr/sbin
 	$(INSTALL_BIN) files/ath9k-watchdog $(1)/usr/sbin/
 	$(INSTALL_BIN) files/ath9k-watchdog-pm $(1)/usr/sbin/
+	$(INSTALL_DIR) $(1)/usr/lib
+	$(INSTALL_BIN) files/libath9k-watchdog $(1)/usr/lib/
+	
+	
+
 	$(INSTALL_DIR) $(1)/usr/bin
 	$(INSTALL_BIN) files/urlencode $(1)/usr/bin/
 	$(INSTALL_DIR) $(1)/etc/init.d/

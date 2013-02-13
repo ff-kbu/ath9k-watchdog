@@ -1,0 +1,21 @@
+#!/bin/sh
+. /etc/functions.sh
+
+config_load 'ath9k-watchdog.conf'
+config_get WD_POST_URL 'post_url'
+config_get WD_QUEUE_DIR 'queue_dir'
+
+WGETC=$(which wget)
+
+upload_compressed_query_string(){
+	$WGETC -6 -q --post-data="$(zcat $1)" $WD_POST_URL -O -
+	echo $?
+}
+
+# Are there more than 15 dumps waiting for upload? If so, do not store new ones 
+# to avoid flash-exhaustion
+is_queueable(){
+	local QUEUE_SIZE=15
+	local num=$(ls $WD_QUEUE_DIR | wc -l)	
+	expr num < QUEUE_SIZE
+}
