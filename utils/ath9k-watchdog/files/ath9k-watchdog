@@ -1,7 +1,6 @@
 #!/bin/sh
-. /usr/lib/libath9k-wathdog
 . /lib/freifunk/lib_node.sh
-
+mkdir -p /usr/lib/ath9k-watchdog
 node_id="$(get_node_id)"
 
 logread -f | while read line
@@ -13,18 +12,12 @@ do
 			echo -n "nodeid=${node_id}&tstmp=${tstmp}&dmesg=" > /tmp/$tstmp
 			/bin/dmesg > /tmp/dmesg.$tstmp
 			/usr/bin/urlencode /tmp/dmesg.$tstmp >> /tmp/$tstmp
-			
 			# Compress to preserve space
 			/bin/gzip /tmp/$tstmp
 			
-			#Try to upload
-			local upload_ret_code = $(upload_compressed_query_string $f)
-			local is_queueable = $(is_queueable)
+			# Move into upload directory
+			mv  /tmp/$tstmp.gz /usr/lib/ath9k-watchdog
 
-			if [ $upload_ret_code -ne 0 ] && [ is_queueable -eq 1 ]; then #Upload impossible
-				# Move into upload directory
-				mv  /tmp/$tstmp.gz /usr/lib/ath9k-watchdog
-			fi
 			#Bye 
 			/sbin/reboot
 		;;

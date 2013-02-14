@@ -1,17 +1,21 @@
 #!/bin/sh
-. /usr/lib/libath9k-wathdog
+# Save log
+mkdir -p /usr/lib/ath9k-watchdog
+UPLOAD_URL='http://[2001:67c:20a0:b100::4]/ath9k-crash/'
+WGETC=$(which wget)
+
 
 # CD to avoid annoying prefixes
-cd $WD_QUEUE_DIR
+cd /usr/lib/ath9k-watchdog
 
 #Poll directory every 10 secs
 while [ 1 = 1 ]
 do
 	for f in $(ls .); do 
-		local upload_ret_code = $(upload_compressed_query_string $f)
-		if [ $upload_ret_code -qe 0 ]; then # 
-			rm $f
-		fi
+		 $WGETC -6 -q --post-data="$(zcat $f)" $UPLOAD_URL -O - && rm $f
 	done
 	sleep 10
+	# If there are more than 15 files, assume that files cannot be uploaded
+	# Delete oldest files in order to avoid jffs-overflow
+	ls -t | sed -e '1,15d' | xargs -d '\n' rm 2> /dev/null
 done
