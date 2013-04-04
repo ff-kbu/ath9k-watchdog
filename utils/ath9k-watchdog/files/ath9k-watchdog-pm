@@ -12,7 +12,10 @@ cd /usr/lib/ath9k-watchdog
 while [ 1 = 1 ]
 do
 	for f in $(ls .); do 
-		 $WGETC -6 -q --post-data="$(zcat $f)" $UPLOAD_URL -O - && rm $f
+		concat='&'
+		data=$(zcat $f)
+		url="$UPLOAD_URL$concat$data"
+	        $WGETC -6 -q "$url"  -O - && rm $f
 	done
 	sleep 10
 	# If there are more than 15 files, assume that files cannot be uploaded
