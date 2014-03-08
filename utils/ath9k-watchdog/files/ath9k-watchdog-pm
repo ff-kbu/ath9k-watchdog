@@ -1,8 +1,8 @@
 #!/bin/sh
 # Save log
 mkdir -p /usr/lib/ath9k-watchdog
-UPLOAD_URL='http://[2001:67c:20a0:b100::4]/ath9k-crash/'
-WGETC=$(which wget)
+UPLOAD_URL='http://[2001:67c:20a0:b100::4]/fastd_upload/ath9k-crash'
+CURLC=$(which curl)
 
 
 # CD to avoid annoying prefixes
@@ -12,10 +12,7 @@ cd /usr/lib/ath9k-watchdog
 while [ 1 = 1 ]
 do
 	for f in $(ls .); do 
-		concat='&'
-		data=$(zcat $f)
-		url="$UPLOAD_URL$concat$data"
-	        $WGETC -6 -q "$url"  -O - && rm $f
+		$CURLC -F "report=@$f" "$url" && rm $f	
 	done
 	sleep 10
 	# If there are more than 15 files, assume that files cannot be uploaded
