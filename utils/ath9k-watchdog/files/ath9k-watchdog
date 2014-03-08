@@ -9,9 +9,11 @@ do
 	*"Could not stop RX"*) 
 			# Perform post-mortem dump
 			tstmp=$(/bin/date +%s)
-			echo -n "nodeid=${node_id}&tstmp=${tstmp}&dmesg=" > /tmp/$tstmp
-			/bin/dmesg > /tmp/dmesg.$tstmp
-			/usr/bin/urlencode /tmp/dmesg.$tstmp >> /tmp/$tstmp
+			echo -ne "nodeid=${node_id}&tstmp=${tstmp}\n" > /tmp/$tstmp
+			echo -ne "reset-counters:\n" >> /tmp/$tstmp
+			cat /sys/kernel/debug/ieee80211/phy*/ath9k/reset >> /tmp/$tstmp 
+			echo -ne "dmesg:\n" >> /tmp/$tstmp
+			/bin/dmesg >> /tmp/$tstmp
 			# Compress to preserve space
 			/bin/gzip /tmp/$tstmp
 			
