@@ -22,7 +22,7 @@ define Package/ath9k-watchdog
 endef
 
 define Package/ath9k-watchdog/description
- If pattern is seen in the logs, wifi reset is executed
+ If pattern is seen in the logs, system reset is executed
 endef
 
 
